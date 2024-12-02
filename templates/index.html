@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI助手</title>
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+    <header class="header">
+        <h1>AI智能助手</h1>
+        <p>基于大语言模型的智能对话系统</p>
+    </header>
+    <div class="layout-container">
+        <div class="sidebar">
+            <div class="history-header">
+                <h2>历史记录</h2>
+                <button class="new-chat" onclick="startNewChat()">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 1V15M1 8H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    新对话
+                </button>
+            </div>
+            <div class="history-list" id="history-list">
+                <!-- 历史记录将在这里显示 -->
+            </div>
+        </div>
+        <div class="chat-container">
+            <div class="chat-box" id="chat-box">
+                <!-- 对话内容将显示在这里 -->
+            </div>
+            <div class="input-container">
+                <div class="mode-selector">
+                    <input type="checkbox" id="data-science-mode" class="mode-checkbox">
+                    <label for="data-science-mode">数据科学模式</label>
+                </div>
+                <div class="upload-container">
+                    <input type="file" id="file-input" multiple style="display: none" onchange="handleFileUpload(event)">
+                    <button class="upload-button" onclick="document.getElementById('file-input').click()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M4 16L4 17C4 18.6569 5.34315 20 7 20L17 20C18.6569 20 20 18.6569 20 17L20 16M16 8L12 4M12 4L8 8M12 4L12 16" 
+                                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <div class="file-preview" id="file-preview"></div>
+                </div>
+                <textarea 
+                    class="input-box" 
+                    id="input-box" 
+                    placeholder="输入你的问题..." 
+                    rows="1"
+                    onkeydown="handleKeyDown(event)"></textarea>
+                <button class="send-button" id="send-button" onclick="sendMessage()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9" 
+                              stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="/assets/script.js"></script>
+</body>
+</html> 

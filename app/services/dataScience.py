@@ -1,0 +1,18 @@
+from vanna.remote import VannaDefault
+vn = VannaDefault(model='test2820', api_key='6b837c6bf630461eab556b4223ed8c22')
+vn.connect_to_postgres(host='222.20.96.38', dbname='SiemensHarden_DB', user='postgres', password='Liu_123456', port='5432')
+training_data = vn.get_training_data()
+print("------------------------------------training_data-------------------------------------")
+print(training_data)
+sql_query=vn.generate_sql('Find 10 siemens_advisories data')
+print("------------------------------------sql生成成功-------------------------------------")
+print(sql_query)    
+data=vn.run_sql(sql_query)
+print("------------------------------------data生成成功-------------------------------------")
+print(data)
+plotly_code=vn.generate_plotly_code(data)
+print("------------------------------------plotly_code生成成功-------------------------------------")
+print(plotly_code)
+vn.get_plotly_figure(plotly_code,data)
+print("------------------------------------figure生成成功-------------------------------------")
+
