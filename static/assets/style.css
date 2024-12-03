@@ -2,6 +2,30 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+html {
+    font-size: 16px;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
 }
 
 body {
@@ -13,6 +37,19 @@ body {
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    touch-action: manipulation;
+    -ms-touch-action: manipulation;
+}
+
+.layout-container {
+    display: flex;
+    height: calc(100vh - 120px);
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    gap: 20px;
 }
 
 .header {
@@ -20,6 +57,7 @@ body {
     padding: 1.5rem 2rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
+    -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
     margin-bottom: 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -38,15 +76,6 @@ body {
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.layout-container {
-    display: flex;
-    height: calc(100vh - 120px);
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 20px;
-    gap: 20px;
-}
-
 .sidebar {
     width: 280px;
     min-width: 280px;
@@ -55,6 +84,7 @@ body {
     border: 1px solid rgba(229, 229, 229, 0.8);
     display: flex;
     flex-direction: column;
+    -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
     height: 100%;
     overflow: hidden;
@@ -101,12 +131,14 @@ body {
     display: flex;
     flex-direction: column;
     background-color: rgba(255, 255, 255, 0.92);
+    -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
     border-radius: 12px;
     border: 1px solid rgba(229, 229, 229, 0.8);
     max-width: 900px;
     margin: 0;
     height: 100%;
+    overflow: hidden;
 }
 
 .chat-box {
@@ -118,6 +150,7 @@ body {
     gap: 1.8rem;
     background: rgba(255, 255, 255, 0.5);
     scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 
 .message {
@@ -128,46 +161,56 @@ body {
     max-width: 85%;
     position: relative;
     transition: all 0.3s ease;
+    margin-bottom: 1rem;
 }
 
 .user-message {
     margin-left: auto;
     background: linear-gradient(135deg, rgba(16, 163, 127, 0.1), rgba(9, 137, 160, 0.1));
     border: 1px solid rgba(16, 163, 127, 0.2);
+    flex-direction: row-reverse;
 }
 
-.assistant-message {
+.ai-message {
     margin-right: auto;
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(247, 247, 248, 0.9));
     border: 1px solid rgba(9, 137, 160, 0.2);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.avatar {
+.avatar-container {
+    flex-shrink: 0;
     width: 40px;
     height: 40px;
     border-radius: 12px;
-    object-fit: cover;
+    overflow: hidden;
     border: 2px solid rgba(255, 255, 255, 0.8);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+    background-color: #f0f0f0;
 }
 
-.user-message .avatar {
+.avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-message .avatar-container {
     border-color: rgba(16, 163, 127, 0.3);
 }
 
-.assistant-message .avatar {
+.ai-message .avatar-container {
     border-color: rgba(9, 137, 160, 0.3);
 }
 
-.avatar:hover {
+.avatar-container:hover {
     transform: scale(1.05);
 }
 
 .message-content {
     flex: 1;
-    padding: 0.8rem;
+    padding: 0.8rem 1.2rem;
     font-size: 0.95rem;
     line-height: 1.6;
     white-space: pre-wrap;
@@ -175,30 +218,15 @@ body {
     background: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
     position: relative;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .user-message .message-content {
-    background: rgba(16, 163, 127, 0.05);
-}
-
-.assistant-message .message-content {
     background: rgba(255, 255, 255, 0.9);
 }
 
-.message::after {
-    content: attr(data-time);
-    position: absolute;
-    bottom: 0.3rem;
-    font-size: 0.7rem;
-    color: rgba(107, 114, 128, 0.7);
-}
-
-.user-message::after {
-    right: 4rem;
-}
-
-.assistant-message::after {
-    left: 4rem;
+.ai-message .message-content {
+    background: rgba(255, 255, 255, 0.95);
 }
 
 .input-container {
@@ -210,6 +238,7 @@ body {
     gap: 1rem;
     align-items: flex-end;
     background-color: rgba(255, 255, 255, 0.92);
+    -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
@@ -221,9 +250,14 @@ body {
     gap: 0.5rem;
 }
 
+.file-input {
+    display: none;
+}
+
 .upload-button {
     background: rgba(16, 163, 127, 0.1);
     padding: 0.7rem;
+    border: none;
     border-radius: 10px;
     color: #10a37f;
     cursor: pointer;
@@ -248,6 +282,11 @@ body {
     background: rgba(255, 255, 255, 0.9);
     transition: all 0.3s ease;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    -webkit-appearance: none;
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
 }
 
 .input-box:focus {
@@ -259,11 +298,18 @@ body {
 
 .send-button {
     background: linear-gradient(135deg, #10a37f, #098aa0);
-    padding: 0.9rem;
+    border: none;
     border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
+    padding: 0;
+    margin-left: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .send-button:hover {
@@ -272,25 +318,45 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.loading-dots {
-    display: flex;
-    gap: 0.5rem;
+.send-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
-.loading-dots span {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: #10a37f;
-    animation: bounce 1.4s infinite ease-in-out both;
+.send-button svg {
+    width: 24px;
+    height: 24px;
+    color: white;
 }
 
-.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
 
-@keyframes bounce {
-    0%, 80%, 100% { transform: scale(0); }
-    40% { transform: scale(1); }
+.loading-icon {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes dash {
+    0% {
+        stroke-dashoffset: 60;
+    }
+    50% {
+        stroke-dashoffset: 45;
+    }
+    100% {
+        stroke-dashoffset: 60;
+    }
+}
+
+.spinner {
+    stroke-dasharray: 60;
+    stroke-dashoffset: 45;
+    animation: dash 1.5s ease-in-out infinite;
 }
 
 .history-list {
@@ -298,6 +364,16 @@ body {
     overflow-y: auto;
     padding: 1rem;
     height: calc(100% - 60px);
+}
+
+.history-list ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.history-list li {
+    margin-bottom: 0.6rem;
 }
 
 .history-item {
@@ -323,38 +399,26 @@ body {
     margin-top: 0.5rem;
 }
 
-.message-files {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+.file-info {
     margin-top: 0.5rem;
+    padding: 0.5rem 0.8rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #666;
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.message-file-item {
-    max-width: 200px;
-    cursor: pointer;
-}
-
-.message-file-item img {
-    max-width: 100%;
-    border-radius: 4px;
-}
-
-.pdf-preview {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+.error-message {
+    background-color: #fee2e2;
+    color: #dc2626;
     padding: 1rem;
-    background-color: #f5f5f5;
-    border-radius: 4px;
-}
-
-.pdf-preview span {
-    font-size: 0.8rem;
-    color: #6b6c7b;
+    border-radius: 8px;
+    margin: 0.5rem auto;
+    max-width: 85%;
     text-align: center;
-    word-break: break-all;
+    border: 1px solid #fecaca;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .chat-box::-webkit-scrollbar {
@@ -375,247 +439,32 @@ body {
     background: rgba(16, 163, 127, 0.5);
 }
 
-.message:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-@keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
-}
-
-.assistant-message.typing .message-content::after {
-    content: '▋';
-    display: inline-block;
-    animation: blink 1s infinite;
-    margin-left: 2px;
-}
-
-@keyframes blink {
-    50% { opacity: 0 }
-}
-
-/* 文件预览样式 */
-.preview-item {
-    position: relative;
-    display: inline-block;
-    margin: 5px;
-}
-
-.preview-image {
-    max-width: 100px;
-    max-height: 100px;
-    border-radius: 4px;
-    object-fit: cover;
-}
-
-.delete-file-btn {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #ff4d4f;
-    color: white;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.delete-file-btn:hover {
-    background: #ff7875;
-}
-
-.pdf-icon {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    background: #f5f5f5;
-    border-radius: 4px;
-}
-
-.pdf-icon span {
-    font-size: 12px;
-    margin-top: 5px;
-    max-width: 100px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-/* 添加模式选择器样式 */
-.mode-selector {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0 1rem;
-    border-right: 1px solid rgba(16, 163, 127, 0.2);
-}
-
-.mode-checkbox {
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 2px solid rgba(16, 163, 127, 0.5);
-    border-radius: 4px;
-    cursor: pointer;
-    position: relative;
-    transition: all 0.3s ease;
-}
-
-.mode-checkbox:checked {
-    background-color: #10a37f;
-    border-color: #10a37f;
-}
-
-.mode-checkbox:checked::after {
-    content: '✓';
-    position: absolute;
-    color: white;
-    font-size: 14px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.mode-selector label {
-    font-size: 0.9rem;
-    color: #10a37f;
-    cursor: pointer;
-    user-select: none;
-}
-
-/* 数据科学模式的样式 */
-.code-block, .data-block, .analysis-block, .figure-block {
-    margin: 1rem 0;
-    padding: 1rem;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.9);
-}
-
-.code-header, .data-header, .analysis-header, .figure-header {
-    font-weight: 600;
-    color: #10a37f;
-    margin-bottom: 0.5rem;
-}
-
-.code-block pre, .data-block pre {
-    background: rgba(0, 0, 0, 0.05);
-    padding: 0.5rem;
-    border-radius: 4px;
-    overflow-x: auto;
-}
-
-.result-figure {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-top: 0.5rem;
-}
-
-.analysis-block {
-    background: rgba(16, 163, 127, 0.05);
-}
-
-/* 添加消息块样式 */
-.message-block {
-    margin: 1rem 0;
-    padding: 1rem;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.9);
-    border-left: 4px solid #10a37f;
-}
-
-.message-header {
-    font-weight: 600;
-    color: #10a37f;
-    margin-bottom: 0.5rem;
-}
-
-.message-content {
-    color: #4a5568;
-    font-size: 0.95rem;
-}
-
-/* 数据科学响应样式 */
-.datascience-response {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-}
-
-.code-block, .data-block, .analysis-block {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 8px;
-    padding: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.code-header, .data-header, .analysis-header {
-    font-weight: 600;
-    color: #10a37f;
-    margin-bottom: 0.8rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid rgba(16, 163, 127, 0.2);
-}
-
-.code-block pre, .data-block pre {
-    background: rgba(0, 0, 0, 0.05);
-    padding: 1rem;
-    border-radius: 6px;
-    overflow-x: auto;
-    font-family: 'Consolas', monospace;
-    font-size: 0.9rem;
-    line-height: 1.5;
-}
-
-.analysis-content {
-    line-height: 1.6;
-    color: #2d3748;
-    font-size: 0.95rem;
-}
-
-.data-content {
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-/* 添加滚动条样式 */
-.data-content::-webkit-scrollbar {
-    width: 6px;
-}
-
-.data-content::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.05);
-    border-radius: 3px;
-}
-
-.data-content::-webkit-scrollbar-thumb {
-    background: rgba(16, 163, 127, 0.3);
-    border-radius: 3px;
-}
-
-/* 添加禁用状态样式 */
-.input-box:disabled {
-    background: rgba(0, 0, 0, 0.05);
-    cursor: not-allowed;
-}
-
-.send-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-
-/* 添加处理中的视觉反馈 */
-.processing .input-container {
-    opacity: 0.7;
-    pointer-events: none;
+@media (max-width: 768px) {
+    .layout-container {
+        flex-direction: column;
+        height: calc(100vh - 180px);
+        padding: 1rem;
+    }
+    
+    .sidebar {
+        width: 100%;
+        min-width: 0;
+        max-height: 200px;
+    }
+    
+    .chat-container {
+        max-width: 100%;
+    }
+    
+    .message {
+        max-width: 90%;
+    }
+    
+    .input-container {
+        padding: 1rem;
+    }
+    
+    .header {
+        padding: 1rem;
+    }
 }

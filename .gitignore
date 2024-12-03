@@ -7,4 +7,5 @@ env/
 venv/
 ENV/
 .idea/
-.vscode/ 
+.vscode/
+static/temp_plot.html 
